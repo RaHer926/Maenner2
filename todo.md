@@ -59,3 +59,12 @@
 - [x] Display survey history per patient
 - [x] Add timeline view for patient progress
 - [ ] Implement filtering and sorting
+
+## Questionnaire Submission Fix
+- [x] Investigate why questionnaire doesn't proceed to results after completion
+- [x] Fix CORS configuration to allow all origins
+- [x] Fix date format conversion in backend
+- [ ] Connect Survey component to backend API
+- [ ] Save survey responses to database
+- [ ] Display results after survey completion
+- [ ] Test complete survey workflow
