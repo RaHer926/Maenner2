@@ -67,8 +67,8 @@ export const surveysRouter = router({
       z.object({
         patientId: z.number(),
         language: z.string().default('de'),
-        answers: z.record(z.any()),
-        scores: z.record(z.any()),
+        answers: z.record(z.string(), z.coerce.number()),
+        scores: z.record(z.string(), z.any()),
         totalScore: z.number().optional(),
         notes: z.string().optional(),
       })
@@ -90,7 +90,7 @@ export const surveysRouter = router({
         .insert(surveys)
         .values({
           ...input,
-          createdBy: ctx.user?.userId,
+          createdBy: ctx.user?.userId || null,
         })
         .returning();
 

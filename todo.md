@@ -93,3 +93,10 @@
 - [x] Save recommendations to database linked to surveys
 - [x] Display recommendations in patient survey results
 - [x] Write vitest tests for recommendation engine
+
+## Survey Submission Bug Fix
+- [x] Check backend logs for survey submission error
+- [x] Identify root cause of "Fehler beim Speichern des Fragebogens"
+- [x] Fix survey submission bug
+- [x] Test complete survey workflow
+- [x] Verify data is saved correctly to database
