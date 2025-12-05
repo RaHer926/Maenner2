@@ -64,7 +64,14 @@
 - [x] Investigate why questionnaire doesn't proceed to results after completion
 - [x] Fix CORS configuration to allow all origins
 - [x] Fix date format conversion in backend
-- [ ] Connect Survey component to backend API
-- [ ] Save survey responses to database
-- [ ] Display results after survey completion
-- [ ] Test complete survey workflow
+- [x] Connect Survey component to backend API
+- [x] Save survey responses to database
+- [x] Display results after survey completion
+- [x] Test complete survey workflow
+
+## Survey Results Implementation
+- [x] Verify survey submission saves to database
+- [x] Create SurveyResults component with health scores visualization
+- [x] Add results page to workflow after survey completion
+- [x] Test complete survey workflow (select patient → fill survey → view results → dashboard)
+- [x] Verify survey history displays in doctor dashboard

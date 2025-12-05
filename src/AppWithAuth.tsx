@@ -6,10 +6,11 @@ import LanguageToggle from './components/LanguageToggle';
 import { PatientManagement } from './components/PatientManagement';
 import { DoctorDashboard } from './components/DoctorDashboard';
 import Survey from './components/Survey';
+import SurveyResults from './components/SurveyResults';
 import { trpc } from './lib/trpc';
 import './App.css';
 
-type View = 'home' | 'patients' | 'survey' | 'dashboard';
+type View = 'home' | 'patients' | 'survey' | 'results' | 'dashboard';
 
 interface Patient {
   id: number;
@@ -26,10 +27,19 @@ function AppWithAuth() {
   const { t } = useLanguage();
   const [view, setView] = useState<View>('home');
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [surveyResults, setSurveyResults] = useState<{
+    answers: Record<string, number>;
+    scores: Record<string, { score: number; maxScore: number; interpretation: string }>;
+    totalScore: number;
+  } | null>(null);
 
   const createSurvey = trpc.surveys.create.useMutation({
     onSuccess: () => {
-      setView('dashboard');
+      setView('results');
+    },
+    onError: (error) => {
+      console.error('Failed to save survey:', error);
+      alert('Fehler beim Speichern des Fragebogens. Bitte versuchen Sie es erneut.');
     },
   });
 
@@ -51,6 +61,13 @@ function AppWithAuth() {
     
     // Calculate total score
     const totalScore = Object.values(scores).reduce((sum, s) => sum + s.score, 0);
+
+    // Store results for display
+    setSurveyResults({
+      answers,
+      scores,
+      totalScore,
+    });
 
     // Save to database
     createSurvey.mutate({
@@ -185,6 +202,20 @@ function AppWithAuth() {
             setSelectedPatient(null);
             setView('patients');
           }}
+        />
+      )}
+
+      {view === 'results' && selectedPatient && surveyResults && (
+        <SurveyResults
+          patient={selectedPatient}
+          scores={surveyResults.scores}
+          totalScore={surveyResults.totalScore}
+          onContinue={() => {
+            setSurveyResults(null);
+            setSelectedPatient(null);
+            setView('dashboard');
+          }}
+          language="de"
         />
       )}
 
