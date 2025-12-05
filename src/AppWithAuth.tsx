@@ -1,44 +1,67 @@
 import { useState } from 'react';
 import { useAuth } from './contexts/AuthContext';
+import { useLanguage } from './LanguageContext';
 import { Login } from './components/Login';
+import LanguageToggle from './components/LanguageToggle';
+import { PatientManagement } from './components/PatientManagement';
+import { DoctorDashboard } from './components/DoctorDashboard';
 import Survey from './components/Survey';
-import Dashboard from './components/Dashboard';
+import { trpc } from './lib/trpc';
 import './App.css';
 
-type View = 'home' | 'survey' | 'dashboard';
+type View = 'home' | 'patients' | 'survey' | 'dashboard';
 
-interface SurveyResult {
-  id: string;
-  patientName: string;
-  completedAt: Date;
-  answers: Record<string, number>;
-  scores: Record<string, { score: number; maxScore: number; interpretation: string }>;
+interface Patient {
+  id: number;
+  firstName: string;
+  lastName: string;
+  dateOfBirth?: string;
+  email?: string;
+  phone?: string;
+  patientNumber?: string;
 }
 
 function AppWithAuth() {
   const { isAuthenticated, user, logout } = useAuth();
+  const { t } = useLanguage();
   const [view, setView] = useState<View>('home');
-  const [surveyResults, setSurveyResults] = useState<SurveyResult[]>([]);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+
+  const createSurvey = trpc.surveys.create.useMutation({
+    onSuccess: () => {
+      setView('dashboard');
+    },
+  });
 
   // Show login if not authenticated
   if (!isAuthenticated) {
     return <Login />;
   }
 
+  const handlePatientSelect = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setView('survey');
+  };
+
   const handleSurveyComplete = (answers: Record<string, number>) => {
+    if (!selectedPatient) return;
+
     // Calculate scores
     const scores = calculateScores(answers);
     
-    const result: SurveyResult = {
-      id: Date.now().toString(),
-      patientName: 'Demo Patient',
-      completedAt: new Date(),
+    // Calculate total score
+    const totalScore = Object.values(scores).reduce((sum, s) => sum + s.score, 0);
+
+    // Save to database
+    createSurvey.mutate({
+      patientId: selectedPatient.id,
+      language: 'de',
       answers,
       scores,
-    };
-    
-    setSurveyResults(prev => [...prev, result]);
-    setView('dashboard');
+      totalScore,
+    });
+
+
   };
 
   const calculateScores = (answers: Record<string, number>) => {
@@ -112,8 +135,9 @@ function AppWithAuth() {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <h1 style={{ margin: 0, fontSize: '1.5rem' }}>Männergesundheit Fragebogen</h1>
+        <h1 style={{ margin: 0, fontSize: '1.5rem' }}>{t.appTitle}</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <LanguageToggle />
           <span>{user?.name}</span>
           <button
             onClick={logout}
@@ -137,8 +161,8 @@ function AppWithAuth() {
         <div className="home">
           <h2>Willkommen</h2>
           <div className="button-group">
-            <button onClick={() => setView('survey')}>
-              Neuen Fragebogen starten
+            <button onClick={() => setView('patients')}>
+              Patienten verwalten
             </button>
             <button onClick={() => setView('dashboard')}>
               Ergebnisse anzeigen
@@ -147,16 +171,25 @@ function AppWithAuth() {
         </div>
       )}
 
-      {view === 'survey' && (
+      {view === 'patients' && (
+        <PatientManagement
+          onSelectPatient={handlePatientSelect}
+          onBack={() => setView('home')}
+        />
+      )}
+
+      {view === 'survey' && selectedPatient && (
         <Survey
           onComplete={handleSurveyComplete}
-          onCancel={() => setView('home')}
+          onCancel={() => {
+            setSelectedPatient(null);
+            setView('patients');
+          }}
         />
       )}
 
       {view === 'dashboard' && (
-        <Dashboard
-          results={surveyResults}
+        <DoctorDashboard
           onBack={() => setView('home')}
         />
       )}

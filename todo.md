@@ -29,12 +29,33 @@
 
 ## Doctor Dashboard
 - [ ] Build doctor dashboard with patient list
-- [ ] Display survey history per patient
+- [x] Display survey history per patient
 - [ ] Show detailed survey results with recommendations
 - [ ] Add filtering and search functionality
 
 ## Testing & Deployment
 - [x] Test complete authentication flow
-- [ ] Test survey submission and retrieval
-- [ ] Test patient management operations
+- [x] Test survey submission and retrieval
+- [x] Test patient management operations
 - [ ] Create checkpoint for deployment
+
+## Questionnaire Update
+- [x] Verify current questionnaire version
+- [x] Update to latest questionnaire version with all sections
+
+## Patient Management Implementation
+- [x] Create patient list component
+- [x] Add patient creation form
+- [ ] Implement patient edit functionality
+- [x] Add patient search and filtering
+
+## Questionnaire-Database Integration
+- [x] Link questionnaire to patient selection
+- [x] Save survey responses to database
+- [x] Retrieve and display saved surveys
+
+## Doctor Dashboard Enhancement
+- [x] Build patient overview page
+- [x] Display survey history per patient
+- [x] Add timeline view for patient progress
+- [ ] Implement filtering and sorting

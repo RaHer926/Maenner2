@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLanguage } from '../LanguageContext'
 import './Dashboard.css'
 
 interface SurveyResult {
@@ -16,19 +17,8 @@ interface DashboardProps {
 
 type ViewMode = 'patient' | 'doctor'
 
-const sectionNames: Record<string, string> = {
-  B: 'Urogenitalsystem',
-  C: 'Sexuelle Gesundheit',
-  D: 'Hormonelle Gesundheit',
-  E: 'Herz-Kreislauf',
-  F: 'Stoffwechsel',
-  G: 'Verdauung',
-  H: 'Bewegungsapparat',
-  I: 'Psyche',
-  J: 'Lebensqualität',
-}
-
 function Dashboard({ results, onBack }: DashboardProps) {
+  const { t, language } = useLanguage()
   const [viewMode, setViewMode] = React.useState<ViewMode>('patient')
   const latestResult = results[results.length - 1]
 
@@ -36,15 +26,15 @@ function Dashboard({ results, onBack }: DashboardProps) {
     return (
       <div className="dashboard">
         <div className="dashboard-header">
-          <h1>Dashboard</h1>
+          <h1>{t.dashboard}</h1>
           <button className="btn btn-secondary" onClick={onBack}>
-            ← Zurück
+            {t.backToHome}
           </button>
         </div>
         <div className="dashboard-content">
           <div className="empty-state">
-            <h2>Keine Ergebnisse vorhanden</h2>
-            <p>Füllen Sie zunächst einen Fragebogen aus.</p>
+            <h2>{t.noResults}</h2>
+            <p>{t.noResultsMessage}</p>
           </div>
         </div>
       </div>
@@ -55,57 +45,27 @@ function Dashboard({ results, onBack }: DashboardProps) {
     if (interpretation === 'Gut' || interpretation === 'Keine erektile Dysfunktion') return '#48bb78'
     if (interpretation === 'Leicht beeinträchtigt' || interpretation === 'Leichte ED') return '#ecc94b'
     if (interpretation === 'Mäßig beeinträchtigt' || interpretation === 'Leicht-mittelgradige ED' || interpretation === 'Mittelgradige ED') return '#ed8936'
+    if (interpretation === 'Good' || interpretation === 'No Erectile Dysfunction') return '#48bb78'
+    if (interpretation === 'Slightly Impaired' || interpretation === 'Mild ED') return '#ecc94b'
+    if (interpretation === 'Moderately Impaired' || interpretation === 'Mild to Moderate ED' || interpretation === 'Moderate ED') return '#ed8936'
     return '#f56565'
   }
 
   const getRecommendations = (scores: Record<string, any>) => {
     const recommendations: string[] = []
-    
-    // Definiere welche Sektionen invers sind
     const inverseSections = ['B', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
     Object.entries(scores).forEach(([sectionId, data]) => {
-      // Berechne Prozentsatz basierend auf inverse/normal
       let percentage: number
       if (inverseSections.includes(sectionId)) {
-        // Inverse: niedrige Punktzahl = gut, hohe Punktzahl = schlecht
         const minScore = sectionId === 'B' ? 7 : sectionId === 'D' ? 12 : sectionId === 'E' || sectionId === 'F' || sectionId === 'I' ? 6 : 5
         percentage = 100 - ((data.score - minScore) / (data.maxScore - minScore)) * 100
       } else {
-        // Normal (nur C): hohe Punktzahl = gut
         percentage = (data.score / data.maxScore) * 100
       }
 
       if (percentage < 60) {
-        switch (sectionId) {
-          case 'B':
-            recommendations.push('🔹 Prostata-Gesundheit: Sägepalme, Kürbiskernextrakt, Zink')
-            break
-          case 'C':
-            recommendations.push('🔹 Sexuelle Gesundheit: L-Arginin, Maca, Tribulus Terrestris')
-            break
-          case 'D':
-            recommendations.push('🔹 Hormonelle Balance: Vitamin D3, Zink, Magnesium, Ashwagandha')
-            break
-          case 'E':
-            recommendations.push('🔹 Herz-Kreislauf: Omega-3, Coenzym Q10, Magnesium')
-            break
-          case 'F':
-            recommendations.push('🔹 Stoffwechsel: Chrom, Alpha-Liponsäure, Berberin')
-            break
-          case 'G':
-            recommendations.push('🔹 Verdauung: Probiotika, Enzyme, L-Glutamin')
-            break
-          case 'H':
-            recommendations.push('🔹 Bewegungsapparat: Glucosamin, MSM, Kollagen')
-            break
-          case 'I':
-            recommendations.push('🔹 Psyche: Omega-3, B-Vitamine, Magnesium, Rhodiola')
-            break
-          case 'J':
-            recommendations.push('🔹 Vitalität: Multivitamin, Coenzym Q10, B-Komplex')
-            break
-        }
+        recommendations.push(t.recommendations[sectionId as keyof typeof t.recommendations])
       }
     })
 
@@ -114,28 +74,32 @@ function Dashboard({ results, onBack }: DashboardProps) {
 
   const recommendations = getRecommendations(latestResult.scores)
 
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-left">
-          <h1>Dashboard - Ergebnisse</h1>
+          <h1>{t.dashboard} - {t.results}</h1>
           <div className="view-mode-toggle">
             <button
               className={`toggle-btn ${viewMode === 'patient' ? 'active' : ''}`}
               onClick={() => setViewMode('patient')}
             >
-              👤 Patienten-Ansicht
+              {t.patientView}
             </button>
             <button
               className={`toggle-btn ${viewMode === 'doctor' ? 'active' : ''}`}
               onClick={() => setViewMode('doctor')}
             >
-              🩺 Ärztliche Ansicht
+              {t.doctorView}
             </button>
           </div>
         </div>
         <button className="btn btn-secondary" onClick={onBack}>
-          ← Zurück
+          {t.backToHome}
         </button>
       </div>
 
@@ -145,7 +109,7 @@ function Dashboard({ results, onBack }: DashboardProps) {
             <div>
               <h2>{latestResult.patientName}</h2>
               <p className="result-date">
-                Ausgefüllt am: {latestResult.completedAt.toLocaleString('de-DE')}
+                {t.completedOn}: {latestResult.completedAt.toLocaleString(language === 'de' ? 'de-DE' : 'en-US')}
               </p>
             </div>
           </div>
@@ -158,7 +122,7 @@ function Dashboard({ results, onBack }: DashboardProps) {
               return (
                 <div key={sectionId} className="score-card">
                   <div className="score-header">
-                    <h3>{sectionNames[sectionId]}</h3>
+                    <h3>{t.sectionNames[sectionId as keyof typeof t.sectionNames]}</h3>
                     <span className="score-badge" style={{ background: color }}>
                       {data.interpretation}
                     </span>
@@ -176,7 +140,7 @@ function Dashboard({ results, onBack }: DashboardProps) {
 
                   <div className="score-details">
                     <span className="score-value">
-                      {data.score} / {data.maxScore} Punkte
+                      {data.score} / {data.maxScore} {t.points}
                     </span>
                     <span className="score-percentage">{percentage}%</span>
                   </div>
@@ -187,25 +151,21 @@ function Dashboard({ results, onBack }: DashboardProps) {
 
           {viewMode === 'patient' && (
             <div className="patient-info-box">
-              <h3>ℹ️ Hinweis für Patienten</h3>
+              <h3>{t.patientInfoTitle}</h3>
+              <p>{t.patientInfoText}</p>
               <p>
-                Ihre Ergebnisse wurden erfolgreich erfasst. Ihr Arzt wird diese Auswertung
-                mit Ihnen besprechen und gegebenenfalls Empfehlungen zur Verbesserung Ihrer
-                Gesundheit geben.
-              </p>
-              <p>
-                <strong>Nächste Schritte:</strong> Vereinbaren Sie einen Termin zur Besprechung
-                der Ergebnisse mit Ihrem Arzt.
+                <strong>{t.patientInfoNextSteps}</strong> {t.patientInfoAction}
               </p>
             </div>
           )}
 
           {viewMode === 'doctor' && recommendations.length > 0 && (
             <div className="recommendations-section">
-              <h3>🎯 Empfohlene Nahrungsergänzungsmittel</h3>
+              <h3>{t.recommendationsTitle}</h3>
               <p className="recommendations-intro">
-                Basierend auf Ihren Ergebnissen empfehlen wir folgende Nahrungsergänzungsmittel
-                zur Unterstützung Ihrer Gesundheit:
+                {language === 'de' 
+                  ? 'Basierend auf den Ergebnissen empfehlen wir folgende Nahrungsergänzungsmittel zur Unterstützung der Gesundheit:'
+                  : 'Based on the results, we recommend the following supplements to support health:'}
               </p>
               <div className="recommendations-list">
                 {recommendations.map((rec, index) => (
@@ -215,15 +175,18 @@ function Dashboard({ results, onBack }: DashboardProps) {
                 ))}
               </div>
               <p className="recommendations-note">
-                💡 <strong>Hinweis:</strong> Diese Empfehlungen dienen nur zur Information.
-                Bitte konsultieren Sie Ihren Arzt vor der Einnahme von Nahrungsergänzungsmitteln.
+                💡 <strong>{language === 'de' ? 'Hinweis:' : 'Note:'}</strong>{' '}
+                {language === 'de' 
+                  ? 'Diese Empfehlungen dienen nur zur Information. Bitte konsultieren Sie Ihren Arzt vor der Einnahme von Nahrungsergänzungsmitteln.'
+                  : 'These recommendations are for informational purposes only. Please consult your doctor before taking any supplements.'}
               </p>
             </div>
           )}
 
           <div className="action-buttons">
-            <button className="btn btn-primary">📄 PDF exportieren</button>
-            <button className="btn btn-secondary">📊 Detailansicht</button>
+            <button className="btn btn-secondary" onClick={handlePrint}>
+              🖨️ {language === 'de' ? 'Drucken' : 'Print'}
+            </button>
           </div>
         </div>
       </div>
@@ -232,4 +195,3 @@ function Dashboard({ results, onBack }: DashboardProps) {
 }
 
 export default Dashboard
-

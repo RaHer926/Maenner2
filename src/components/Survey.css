@@ -257,4 +257,69 @@
     width: 100%;
   }
 }
+/* Bewertungsskala bei jeder Frage */
+.question-scale-legend {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
 
+.question-scale-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.question-scale-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.question-scale-label {
+  color: #475569;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .question-scale-legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .question-scale-item {
+    justify-content: flex-start;
+  }
+}
+
+.question {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.question:last-child {
+  border-bottom: none;
+}
+
+.question-header {
+  margin-bottom: 12px;
+}
+
+.answer-options {
+  margin-top: 16px;
+}
