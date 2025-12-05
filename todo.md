@@ -100,3 +100,15 @@
 - [x] Fix survey submission bug
 - [x] Test complete survey workflow
 - [x] Verify data is saved correctly to database
+
+## Patient Number Display Issue
+- [ ] Check if patient number is stored in database
+- [ ] Fix patient number display in PatientManagement component
+- [ ] Verify patient number shows correctly in patient list
+
+## TiDB Compatibility Fix
+- [ ] Update database schema from PostgreSQL to TiDB/MySQL
+- [ ] Change JSONB to JSON in schema
+- [ ] Remove RETURNING clauses from queries
+- [ ] Test patient creation with TiDB
+- [ ] Test survey submission with TiDB

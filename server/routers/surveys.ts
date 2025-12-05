@@ -67,13 +67,20 @@ export const surveysRouter = router({
       z.object({
         patientId: z.number(),
         language: z.string().default('de'),
-        answers: z.record(z.string(), z.coerce.number()),
-        scores: z.record(z.string(), z.any()),
+        answers: z.any(),
+        scores: z.any(),
         totalScore: z.number().optional(),
         notes: z.string().optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
+      // Convert answers to numbers if they are strings
+      const answers = Object.fromEntries(
+        Object.entries(input.answers).map(([key, value]) => [
+          key,
+          typeof value === 'string' ? Number(value) : value,
+        ])
+      );
       // Verify patient exists
       const patient = await db.query.patients.findFirst({
         where: eq(patients.id, input.patientId),
@@ -89,7 +96,12 @@ export const surveysRouter = router({
       const [newSurvey] = await db
         .insert(surveys)
         .values({
-          ...input,
+          patientId: input.patientId,
+          language: input.language,
+          answers,
+          scores: input.scores,
+          totalScore: input.totalScore,
+          notes: input.notes,
           createdBy: ctx.user?.userId || null,
         })
         .returning();
