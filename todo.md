@@ -9,11 +9,11 @@
 - [x] Set up Express server with tRPC middleware
 
 ## Frontend-Backend Integration
-- [ ] Install tRPC client dependencies
-- [ ] Configure tRPC client in frontend
-- [ ] Create authentication context and hooks
-- [ ] Build login/registration UI
-- [ ] Implement protected routes
+- [x] Install tRPC client dependencies
+- [x] Configure tRPC client in frontend
+- [x] Create authentication context and hooks
+- [x] Build login/registration UI
+- [x] Implement protected routes
 
 ## Patient Management
 - [ ] Create patient list view
@@ -34,7 +34,7 @@
 - [ ] Add filtering and search functionality
 
 ## Testing & Deployment
-- [ ] Test complete authentication flow
+- [x] Test complete authentication flow
 - [ ] Test survey submission and retrieval
 - [ ] Test patient management operations
 - [ ] Create checkpoint for deployment
