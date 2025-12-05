@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import RecommendationPanel from './RecommendationPanel';
 
 interface Patient {
   id: number;
@@ -12,6 +13,7 @@ interface Patient {
 
 interface SurveyResultsProps {
   patient: Patient;
+  surveyId?: number;
   scores: Record<string, { score: number; maxScore: number; interpretation: string }>;
   totalScore: number;
   onContinue: () => void;
@@ -20,11 +22,13 @@ interface SurveyResultsProps {
 
 const SurveyResults: React.FC<SurveyResultsProps> = ({
   patient,
+  surveyId,
   scores,
   totalScore,
   onContinue,
   language = 'de',
 }) => {
+  const [showRecommendations, setShowRecommendations] = useState(false);
   const translations = {
     de: {
       title: 'Fragebogen-Ergebnisse',
@@ -37,6 +41,8 @@ const SurveyResults: React.FC<SurveyResultsProps> = ({
       interpretation: 'Bewertung',
       continue: 'Zum Dashboard',
       print: 'Drucken',
+      recommendations: 'Empfehlungen anzeigen',
+      hideRecommendations: 'Empfehlungen ausblenden',
       sections: {
         B: 'Urogenitalsystem',
         C: 'Sexuelle Gesundheit',
@@ -60,6 +66,8 @@ const SurveyResults: React.FC<SurveyResultsProps> = ({
       interpretation: 'Interpretation',
       continue: 'Go to Dashboard',
       print: 'Print',
+      recommendations: 'Show Recommendations',
+      hideRecommendations: 'Hide Recommendations',
       sections: {
         B: 'Urogenital System',
         C: 'Sexual Health',
@@ -170,6 +178,23 @@ const SurveyResults: React.FC<SurveyResultsProps> = ({
           })}
         </div>
       </div>
+
+      {/* Recommendations Section */}
+      {surveyId && (
+        <div className="mb-8">
+          <button
+            onClick={() => setShowRecommendations(!showRecommendations)}
+            className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+          >
+            {showRecommendations ? t.hideRecommendations : t.recommendations}
+          </button>
+          {showRecommendations && (
+            <div className="mt-4">
+              <RecommendationPanel surveyId={surveyId} language={language} />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-4 print:hidden">

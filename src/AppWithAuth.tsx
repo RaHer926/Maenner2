@@ -28,13 +28,16 @@ function AppWithAuth() {
   const [view, setView] = useState<View>('home');
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [surveyResults, setSurveyResults] = useState<{
+    surveyId?: number;
     answers: Record<string, number>;
     scores: Record<string, { score: number; maxScore: number; interpretation: string }>;
     totalScore: number;
   } | null>(null);
 
   const createSurvey = trpc.surveys.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Update surveyResults with the created survey ID
+      setSurveyResults(prev => prev ? { ...prev, surveyId: data.id } : null);
       setView('results');
     },
     onError: (error) => {
@@ -208,6 +211,7 @@ function AppWithAuth() {
       {view === 'results' && selectedPatient && surveyResults && (
         <SurveyResults
           patient={selectedPatient}
+          surveyId={surveyResults.surveyId}
           scores={surveyResults.scores}
           totalScore={surveyResults.totalScore}
           onContinue={() => {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { trpc } from '../lib/trpc';
+import TrendChart from './TrendChart';
 
 interface DoctorDashboardProps {
   onBack: () => void;
@@ -89,7 +90,17 @@ export function DoctorDashboard({ onBack }: DoctorDashboardProps) {
               {surveysLoading ? (
                 <div>Lädt...</div>
               ) : surveys && surveys.length > 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <>
+                  {/* Trend Chart */}
+                  {surveys.length >= 2 && (
+                    <div style={{ marginBottom: '2rem' }}>
+                      <TrendChart surveys={surveys} language="de" />
+                    </div>
+                  )}
+
+                  {/* Survey History */}
+                  <h3 style={{ marginTop: surveys.length >= 2 ? '2rem' : 0, marginBottom: '1rem' }}>Fragebogen-Historie</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {surveys.map(survey => {
                     const date = new Date(survey.completedAt);
                     const sections = survey.scores as Record<string, { score: number; maxScore: number; interpretation: string }>;
@@ -169,6 +180,7 @@ export function DoctorDashboard({ onBack }: DoctorDashboardProps) {
                     );
                   })}
                 </div>
+                </>
               ) : (
                 <div style={{
                   padding: '3rem',

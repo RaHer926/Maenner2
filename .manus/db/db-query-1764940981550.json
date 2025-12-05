@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS survey_recommendations (\n  id SERIAL PRIMARY KEY,\n  survey_id INTEGER NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,\n  section VARCHAR(50) NOT NULL,\n  recommendation TEXT NOT NULL,\n  priority VARCHAR(20) DEFAULT 'medium',\n  status VARCHAR(20) DEFAULT 'pending',\n  modified_by INTEGER REFERENCES users(id),\n  modified_at TIMESTAMP,\n  created_at TIMESTAMP DEFAULT NOW() NOT NULL\n);\n\nCREATE INDEX IF NOT EXISTS survey_recommendations_survey_id_idx ON survey_recommendations(survey_id);\nCREATE INDEX IF NOT EXISTS survey_recommendations_status_idx ON survey_recommendations(status);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XMn4eNw3K5Y5uc.root --database htCSxHNxQr3BbordHdEaAe --execute CREATE TABLE IF NOT EXISTS survey_recommendations (\n  id SERIAL PRIMARY KEY,\n  survey_id INTEGER NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,\n  section VARCHAR(50) NOT NULL,\n  recommendation TEXT NOT NULL,\n  priority VARCHAR(20) DEFAULT 'medium',\n  status VARCHAR(20) DEFAULT 'pending',\n  modified_by INTEGER REFERENCES users(id),\n  modified_at TIMESTAMP,\n  created_at TIMESTAMP DEFAULT NOW() NOT NULL\n);\n\nCREATE INDEX IF NOT EXISTS survey_recommendations_survey_id_idx ON survey_recommendations(survey_id);\nCREATE INDEX IF NOT EXISTS survey_recommendations_status_idx ON survey_recommendations(status);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 4209
+}

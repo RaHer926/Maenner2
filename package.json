@@ -39,6 +39,7 @@
     "@trpc/react-query": "^11.0.0",
     "@trpc/server": "^11.0.0",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
@@ -47,6 +48,7 @@
     "lucide-react": "^0.469.0",
     "postgres": "^3.4.5",
     "react": "^19.2.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.0",
     "zod": "^3.24.1"
   }

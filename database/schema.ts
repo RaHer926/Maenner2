@@ -22,6 +22,7 @@ export const patients = pgTable('patients', {
   email: varchar('email', { length: 255 }),
   phone: varchar('phone', { length: 50 }),
   patientNumber: varchar('patient_number', { length: 100 }).unique(),
+  createdBy: integer('created_by').references(() => users.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
@@ -58,6 +59,22 @@ export const recommendations = pgTable('recommendations', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   sectionIdx: index('recommendations_section_idx').on(table.section),
+}));
+
+// Survey Recommendations table (recommendations generated for specific surveys)
+export const surveyRecommendations = pgTable('survey_recommendations', {
+  id: serial('id').primaryKey(),
+  surveyId: integer('survey_id').notNull().references(() => surveys.id, { onDelete: 'cascade' }),
+  section: varchar('section', { length: 50 }).notNull(),
+  recommendation: text('recommendation').notNull(),
+  priority: varchar('priority', { length: 20 }).default('medium'),
+  status: varchar('status', { length: 20 }).default('pending'), // pending, approved, rejected, modified
+  modifiedBy: integer('modified_by').references(() => users.id),
+  modifiedAt: timestamp('modified_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  surveyIdIdx: index('survey_recommendations_survey_id_idx').on(table.surveyId),
+  statusIdx: index('survey_recommendations_status_idx').on(table.status),
 }));
 
 // Audit logs table

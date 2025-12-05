@@ -75,3 +75,21 @@
 - [x] Add results page to workflow after survey completion
 - [x] Test complete survey workflow (select patient → fill survey → view results → dashboard)
 - [x] Verify survey history displays in doctor dashboard
+
+## Trend Charts Implementation
+- [x] Install Chart.js and react-chartjs-2 dependencies
+- [x] Create TrendChart component for score progression visualization
+- [x] Fetch historical survey data for selected patient
+- [x] Display line charts for each health section over time
+- [x] Add date range filtering for trend analysis
+- [x] Integrate trend charts into DoctorDashboard
+
+## Recommendation System
+- [x] Design recommendation logic based on score thresholds
+- [x] Create recommendations table in database schema
+- [x] Implement recommendation generation algorithm
+- [x] Build RecommendationPanel component for doctor review
+- [x] Add ability for doctors to edit/approve recommendations
+- [x] Save recommendations to database linked to surveys
+- [x] Display recommendations in patient survey results
+- [x] Write vitest tests for recommendation engine
