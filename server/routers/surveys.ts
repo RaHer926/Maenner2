@@ -93,7 +93,7 @@ export const surveysRouter = router({
         });
       }
 
-      const [newSurvey] = await db
+      const result = await db
         .insert(surveys)
         .values({
           patientId: input.patientId,
@@ -106,7 +106,7 @@ export const surveysRouter = router({
         })
         .returning();
 
-      return newSurvey;
+      return result[0];
     }),
 
   getByPatient: protectedProcedure

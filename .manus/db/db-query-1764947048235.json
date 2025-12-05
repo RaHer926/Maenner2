@@ -1,0 +1,22 @@
+{
+  "query": "SELECT * FROM patients ORDER BY id DESC LIMIT 3;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XMn4eNw3K5Y5uc.root --database htCSxHNxQr3BbordHdEaAe --execute SELECT * FROM patients ORDER BY id DESC LIMIT 3;",
+  "rows": [
+    {
+      "id": "1",
+      "first_name": "Hans",
+      "last_name": "Test",
+      "date_of_birth": "2001-01-01",
+      "email": "hans@test.de",
+      "phone": "123456",
+      "patient_number": "P-002",
+      "created_by": "NULL",
+      "created_at": "2025-12-05 15:03:51",
+      "updated_at": "2025-12-05 15:03:51"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tfirst_name\tlast_name\tdate_of_birth\temail\tphone\tpatient_number\tcreated_by\tcreated_at\tupdated_at\n1\tHans\tTest\t2001-01-01\thans@test.de\t123456\tP-002\tNULL\t2025-12-05 15:03:51\t2025-12-05 15:03:51\n",
+  "stderr": "",
+  "execution_time_ms": 1605
+}

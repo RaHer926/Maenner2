@@ -112,3 +112,22 @@
 - [ ] Remove RETURNING clauses from queries
 - [ ] Test patient creation with TiDB
 - [ ] Test survey submission with TiDB
+
+## Patient Management Fixes
+- [ ] Remove date of birth field from PatientManagement component
+- [ ] Remove date of birth from patients schema
+- [ ] Remove date of birth from patients router
+- [ ] Implement automatic sequential patient number generation (P-0001, P-0002, etc.)
+- [ ] Test patient creation without date of birth
+- [ ] Verify patient number is automatically assigned and displayed
+
+## Revert to PostgreSQL
+- [ ] Revert database schema back to PostgreSQL
+- [ ] Revert database connection to use postgres-js
+- [ ] Fix patient number assignment with RETURNING clause
+- [ ] Test patient creation with PostgreSQL
+
+## Display Patient ID in Frontend
+- [x] Update PatientManagement component to show ID instead of patient_number
+- [ ] Test patient list display
+- [ ] Test survey workflow

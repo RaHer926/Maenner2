@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { router, protectedProcedure } from '../trpc.js';
+import { router, protectedProcedure, publicProcedure } from '../trpc.js';
 import { db } from '../../database/db.js';
 import { patients } from '../../database/schema.js';
 import { eq, desc, like, or } from 'drizzle-orm';
@@ -57,20 +57,41 @@ export const patientsRouter = router({
       return patient;
     }),
 
-  create: protectedProcedure
+  create: publicProcedure
     .input(
       z.object({
-        firstName: z.string().min(1),
-        lastName: z.string().min(1),
-        dateOfBirth: z.string().optional(),
-        email: z.string().email().optional(),
+        firstName: z.string(),
+        lastName: z.string(),
+        email: z.string().optional(),
         phone: z.string().optional(),
-        patientNumber: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      const [newPatient] = await db.insert(patients).values(input).returning();
-      return newPatient;
+      try {
+        console.log('Creating patient with input:', JSON.stringify(input));
+        
+        // Insert patient and get the returned row with ID
+        const [newPatient] = await db
+          .insert(patients)
+          .values(input)
+          .returning();
+        
+        console.log('New patient created:', JSON.stringify(newPatient));
+        
+        // Update patient number to equal ID
+        const patientNumber = String(newPatient.id);
+        const [updatedPatient] = await db
+          .update(patients)
+          .set({ patientNumber })
+          .where(eq(patients.id, newPatient.id))
+          .returning();
+        
+        console.log('Patient number updated:', JSON.stringify(updatedPatient));
+        return updatedPatient;
+      } catch (error) {
+        console.error('Error creating patient:', error);
+        throw error;
+      }
     }),
 
   update: protectedProcedure
@@ -88,11 +109,16 @@ export const patientsRouter = router({
     .mutation(async ({ input }) => {
       const { id, ...updateData } = input;
 
-      const [updatedPatient] = await db
+      await db
         .update(patients)
         .set({ ...updateData, updatedAt: new Date() })
+        .where(eq(patients.id, id));
+
+      const [updatedPatient] = await db
+        .select()
+        .from(patients)
         .where(eq(patients.id, id))
-        .returning();
+        .limit(1);
 
       if (!updatedPatient) {
         throw new TRPCError({
@@ -107,17 +133,22 @@ export const patientsRouter = router({
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
-      const [deletedPatient] = await db
-        .delete(patients)
+      const [existingPatient] = await db
+        .select()
+        .from(patients)
         .where(eq(patients.id, input.id))
-        .returning();
+        .limit(1);
 
-      if (!deletedPatient) {
+      if (!existingPatient) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Patient not found',
         });
       }
+
+      await db
+        .delete(patients)
+        .where(eq(patients.id, input.id));
 
       return { success: true };
     }),

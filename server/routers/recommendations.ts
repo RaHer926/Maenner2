@@ -37,7 +37,7 @@ export const recommendationsRouter = router({
       // Insert new recommendations
       const insertedRecommendations = [];
       for (const rec of recommendations) {
-        const [inserted] = await db
+        const result = await db
           .insert(surveyRecommendations)
           .values({
             surveyId: input.surveyId,
@@ -47,7 +47,7 @@ export const recommendationsRouter = router({
             status: 'pending',
           })
           .returning();
-        insertedRecommendations.push(inserted);
+        insertedRecommendations.push(result[0]);
       }
 
       return insertedRecommendations;
@@ -85,11 +85,16 @@ export const recommendationsRouter = router({
         updateData.recommendation = input.recommendation;
       }
 
-      const [updated] = await db
+      await db
         .update(surveyRecommendations)
         .set(updateData)
+        .where(eq(surveyRecommendations.id, input.id));
+
+      const [updated] = await db
+        .select()
+        .from(surveyRecommendations)
         .where(eq(surveyRecommendations.id, input.id))
-        .returning();
+        .limit(1);
 
       if (!updated) {
         throw new TRPCError({
@@ -110,7 +115,7 @@ export const recommendationsRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const [updated] = await db
+      await db
         .update(surveyRecommendations)
         .set({
           recommendation: input.recommendation,
@@ -118,8 +123,13 @@ export const recommendationsRouter = router({
           modifiedBy: ctx.user.userId,
           modifiedAt: new Date(),
         })
+        .where(eq(surveyRecommendations.id, input.id));
+
+      const [updated] = await db
+        .select()
+        .from(surveyRecommendations)
         .where(eq(surveyRecommendations.id, input.id))
-        .returning();
+        .limit(1);
 
       if (!updated) {
         throw new TRPCError({

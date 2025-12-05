@@ -22,10 +22,8 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    dateOfBirth: '',
     email: '',
     phone: '',
-    patientNumber: '',
   });
 
   const utils = trpc.useUtils();
@@ -44,10 +42,8 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
       setFormData({
         firstName: '',
         lastName: '',
-        dateOfBirth: '',
         email: '',
         phone: '',
-        patientNumber: '',
       });
     },
   });
@@ -57,10 +53,8 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
     createPatient.mutate({
       firstName: formData.firstName,
       lastName: formData.lastName,
-      dateOfBirth: formData.dateOfBirth || undefined,
       email: formData.email || undefined,
       phone: formData.phone || undefined,
-      patientNumber: formData.patientNumber || undefined,
     });
   };
 
@@ -157,34 +151,20 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
                 />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
-                  Geburtsdatum
-                </label>
-                <input
-                  type="date"
-                  value={formData.dateOfBirth}
-                  onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '0.5rem',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px'
-                  }}
-                />
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
-                  Patientennummer
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#6c757d' }}>
+                  Patientennummer (wird automatisch vergeben)
                 </label>
                 <input
                   type="text"
-                  value={formData.patientNumber}
-                  onChange={(e) => setFormData({ ...formData, patientNumber: e.target.value })}
+                  disabled
+                  placeholder="Wird automatisch generiert"
                   style={{
                     width: '100%',
                     padding: '0.5rem',
                     border: '1px solid #ddd',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
+                    background: '#f8f9fa',
+                    color: '#6c757d'
                   }}
                 />
               </div>
@@ -249,7 +229,7 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Patientennr.</th>
+                <th style={{ padding: '1rem', textAlign: 'left' }}>Patienten-ID</th>
                 <th style={{ padding: '1rem', textAlign: 'left' }}>Name</th>
                 <th style={{ padding: '1rem', textAlign: 'left' }}>Geburtsdatum</th>
                 <th style={{ padding: '1rem', textAlign: 'left' }}>Kontakt</th>
@@ -259,7 +239,7 @@ export function PatientManagement({ onSelectPatient, onBack }: PatientManagement
             <tbody>
               {patients.map((patient) => (
                 <tr key={patient.id} style={{ borderBottom: '1px solid #dee2e6' }}>
-                  <td style={{ padding: '1rem' }}>{patient.patientNumber || '-'}</td>
+                  <td style={{ padding: '1rem' }}>{patient.id}</td>
                   <td style={{ padding: '1rem' }}>
                     {patient.firstName} {patient.lastName}
                   </td>

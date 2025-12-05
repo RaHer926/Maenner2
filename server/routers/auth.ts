@@ -33,7 +33,7 @@ export const authRouter = router({
       // Hash password
       const hashedPassword = await hashPassword(input.password);
 
-      // Create user
+      // Create user and get the inserted user
       const [newUser] = await db
         .insert(users)
         .values({

@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO patients (first_name, last_name, date_of_birth, email, phone, patient_number, created_at, updated_at)\nVALUES ('Hans', 'Test', '2001-01-01', 'hans@test.de', '123456', 'P-002', NOW(), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2XMn4eNw3K5Y5uc.root --database htCSxHNxQr3BbordHdEaAe --execute INSERT INTO patients (first_name, last_name, date_of_birth, email, phone, patient_number, created_at, updated_at)\nVALUES ('Hans', 'Test', '2001-01-01', 'hans@test.de', '123456', 'P-002', NOW(), NOW());",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1752
+}
