@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { appRouter } from './index.js';
 import { createContext } from './context.js';
 import dotenv from 'dotenv';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +28,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Serve static files from dist directory
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+
 // tRPC middleware
 app.use(
   '/trpc',
@@ -31,6 +40,11 @@ app.use(
     createContext,
   })
 );
+
+// Serve index.html for all other routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 // Start server
 app.listen(port, () => {

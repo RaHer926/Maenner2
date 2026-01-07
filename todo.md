@@ -156,3 +156,10 @@
 - [x] Fix build configuration issues
 - [x] Test production build
 - [ ] Verify successful publish
+
+## Persistent Publish Error
+- [x] Check Manus deployment configuration
+- [x] Verify manus.config.json or deployment manifest
+- [x] Check server startup requirements
+- [x] Fix deployment configuration (added static file serving, fixed tRPC URL)
+- [ ] Test publish again
