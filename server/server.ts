@@ -47,8 +47,9 @@ app.get('*', (req, res) => {
 });
 
 // Start server
-app.listen(port, () => {
-  console.log(`🚀 Server running on http://localhost:${port}`);
+const host = '0.0.0.0'; // Bind to all interfaces for production
+app.listen(port, host, () => {
+  console.log(`🚀 Server running on http://${host}:${port}`);
   console.log(`📊 Database: Connected`);
-  console.log(`🔗 tRPC endpoint: http://localhost:${port}/trpc`);
+  console.log(`🔗 tRPC endpoint: http://${host}:${port}/trpc`);
 });

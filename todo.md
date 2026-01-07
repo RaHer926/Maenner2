@@ -163,3 +163,10 @@
 - [x] Check server startup requirements
 - [x] Fix deployment configuration (added static file serving, fixed tRPC URL)
 - [ ] Test publish again
+
+## Hanging Publish Issue
+- [x] Diagnose why publish shows loading but never completes
+- [x] Check server startup script
+- [x] Verify PORT environment variable handling
+- [x] Check for missing dependencies or build errors
+- [x] Fix blocking issue (server now binds to 0.0.0.0 instead of localhost)
