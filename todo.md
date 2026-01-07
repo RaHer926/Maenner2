@@ -170,3 +170,11 @@
 - [x] Verify PORT environment variable handling
 - [x] Check for missing dependencies or build errors
 - [x] Fix blocking issue (server now binds to 0.0.0.0 instead of localhost)
+
+## Database Schema Mismatch (Deployment Error)
+- [x] Fix survey_recommendations schema (survey_id vs surveyId)
+- [x] Fix modifiedBy column name
+- [x] Align all schema definitions with actual database
+- [x] Added automatic database initialization on server start
+- [ ] Test database operations
+- [ ] Redeploy successfully

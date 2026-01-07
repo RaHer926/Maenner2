@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { appRouter } from './index.js';
 import { createContext } from './context.js';
+import { initializeDatabase } from './init-db.js';
 import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +13,9 @@ const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
+
+// Initialize database schema
+await initializeDatabase();
 
 const app = express();
 const port = process.env.BACKEND_PORT || process.env.PORT || 3001;
