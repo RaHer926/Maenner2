@@ -32,11 +32,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Serve static files from dist directory
-const distPath = path.join(__dirname, '..', 'dist');
-app.use(express.static(distPath));
-
-// tRPC middleware
+// tRPC middleware - MUST come BEFORE static file serving
 app.use(
   '/trpc',
   createExpressMiddleware({
@@ -44,6 +40,10 @@ app.use(
     createContext,
   })
 );
+
+// Serve static files from dist directory
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
 
 // Serve index.html for all other routes (SPA fallback)
 app.get('*', (req, res) => {
