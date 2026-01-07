@@ -150,3 +150,9 @@
 - [x] Save edited recommendations to database
 - [x] Test recommendation generation workflow
 - [x] Test recommendation editing functionality
+
+## Publish Issue
+- [x] Diagnose publish error (unspecified error when clicking Publish button)
+- [x] Fix build configuration issues
+- [x] Test production build
+- [ ] Verify successful publish
