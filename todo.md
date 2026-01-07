@@ -196,6 +196,7 @@
 - [x] Create Railway configuration files (railway.json, nixpacks.toml)
 - [x] Configure build and start commands
 - [x] Create deployment guide (RAILWAY_DEPLOYMENT.md)
-- [ ] Push code to GitHub
-- [ ] Deploy to Railway
+- [x] Push code to GitHub
+- [x] Deploy to Railway
+- [ ] Fix tRPC client to use window.location.origin instead of localhost in production
 - [ ] Test production deployment

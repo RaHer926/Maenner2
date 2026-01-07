@@ -5,10 +5,10 @@ import type { AppRouter } from '../../server/index';
 export const trpc = createTRPCReact<AppRouter>();
 
 export function createTRPCClient() {
-  // Use relative URL in production, localhost in development
-  const apiUrl = import.meta.env.PROD 
-    ? '/trpc' 
-    : 'http://localhost:3001/trpc';
+  // In production, use the current domain; in development, use localhost
+  const apiUrl = import.meta.env.DEV
+    ? 'http://localhost:3001/trpc'
+    : `${window.location.origin}/trpc`;
 
   return trpc.createClient({
     links: [
