@@ -7,4 +7,5 @@ export default {
   dbCredentials: {
     url: process.env.RAILWAY_DATABASE_URL || process.env.DATABASE_URL || '',
   },
+  casing: 'preserve',
 } satisfies Config;

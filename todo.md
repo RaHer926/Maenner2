@@ -131,3 +131,22 @@
 - [x] Update PatientManagement component to show ID instead of patient_number
 - [ ] Test patient list display
 - [ ] Test survey workflow
+
+## Railway Database Connection Fix
+- [x] Diagnose Railway PostgreSQL connection timeout issue
+- [x] Test different SSL configurations
+- [x] Fix database connection with ssl: false
+- [x] Restart backend server with new configuration
+- [x] Test login functionality
+- [x] Test patient list loading
+- [x] Test survey submission and results
+
+## Recommendation Generation Fix
+- [x] Fix Drizzle schema to match existing database (camelCase columns)
+- [x] Update surveyRecommendations table definition
+- [x] Fix recommendation generation API
+- [x] Add editable recommendations UI
+- [x] Allow doctors to edit generated recommendations
+- [x] Save edited recommendations to database
+- [x] Test recommendation generation workflow
+- [x] Test recommendation editing functionality

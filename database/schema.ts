@@ -72,6 +72,7 @@ export const surveyRecommendations = pgTable('survey_recommendations', {
   modifiedBy: integer('modified_by').references(() => users.id),
   modifiedAt: timestamp('modified_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   surveyIdIdx: index('survey_recommendations_survey_id_idx').on(table.surveyId),
   statusIdx: index('survey_recommendations_status_idx').on(table.status),
