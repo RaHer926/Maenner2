@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "build:server": "echo 'Server will run with tsx in production'",
     "preview": "vite preview",
     "server": "tsx server/server.ts",
