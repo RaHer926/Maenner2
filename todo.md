@@ -185,3 +185,17 @@
 - [x] Remove TypeScript compilation from build (use tsx directly)
 - [x] Test build locally
 - [ ] Successful deployment
+
+## Persistent Babel Error (Manus Auto-Compilation)
+- [ ] Prevent Manus from auto-running TypeScript compilation
+- [ ] Configure tsconfig.json to skip emit
+- [ ] Add .manusignore or deployment config
+- [ ] Test deployment again
+
+## Railway Deployment
+- [x] Create Railway configuration files (railway.json, nixpacks.toml)
+- [x] Configure build and start commands
+- [x] Create deployment guide (RAILWAY_DEPLOYMENT.md)
+- [ ] Push code to GitHub
+- [ ] Deploy to Railway
+- [ ] Test production deployment
